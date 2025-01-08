@@ -18,7 +18,7 @@ class AuthorController extends Controller
         $query = auth()->user()->authors()
             ->searchByName($searchTerm);
 
-        $authors = $query->latest()->paginate(5)->withQueryString();
+        $authors = $query->latest()->paginate(6)->withQueryString();
 
         return view('authors.index', compact('authors'));
     }

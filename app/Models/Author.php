@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Author extends Model
 {
-    protected $fillable = ['name', 'bio'];
+    protected $fillable = ['name', 'bio', 'author_photo'];
     /**
      * Get all of the books for the Author
      *
@@ -17,6 +18,16 @@ class Author extends Model
     public function books(): BelongsToMany
     {
         return $this->belongsToMany(Book::class);
+    }
+
+    /**
+     * Get the user that owns the Author
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeSearchByName($query, $searchTerm)
@@ -40,6 +51,12 @@ class Author extends Model
                 if ($author->getOriginal('author_photo')) {
                     Storage::disk('public')->delete($author->getOriginal('author_photo'));
                 }
+            }
+        });
+
+        static::deleting(function ($author) {
+            if ($author->author_photo) {
+                Storage::disk('public')->delete($author->author_photo);
             }
         });
     }

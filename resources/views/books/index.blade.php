@@ -9,7 +9,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('books.index') }}">
+
+                    <div class="mt-2">
+                        <a href="{{ route('books.create') }}"
+                        class="select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        >
+                        Add Book to Library
+                        </a>
+                    </div>
+                    <form action="{{ route('books.index') }}" class="mt-6">
                         @csrf
                     <div class="relative h-10 w-full min-w-[200px]">
                         <button type="submit"
@@ -32,18 +40,10 @@
                     </form>
                 </div>
 
-                <div class="mt-4">
-                    <a href="{{ route('books.create') }}"
-                    class="select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    >
-                    Add Book to Library
-                    </a>
-                </div>
-
                 <div class="grid grid-cols-4 lg:grid-cols-2 mt-6 gap-y-2">
                 @forelse ($books as $book)
                     <a href="{{ route('books.show', $book) }}" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
-                        <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.png') }}" alt="Book cover">
+                        <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.png') }}" alt="Cover of {{ $book->title }}">
                         <div class="flex flex-col justify-between p-4 leading-normal">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ $book->title }}</h5>
                             <p class="mb-3 font-normal text-gray-700">{{ implode(', ', $book->authors->pluck('name')->toArray()) }}</p>
@@ -54,7 +54,9 @@
                 @endforelse
                 </div>
 
-
+                <div class="my-4 px-2">
+                    {{ $books->links() }}
+                </div>
             </div>
         </div>
     </div>

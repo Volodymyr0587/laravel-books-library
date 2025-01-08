@@ -22,7 +22,7 @@ class BookController extends Controller
             ->with('authors')
             ->searchByAuthorTitleDescription($searchTerm);
 
-        $books = $query->latest()->paginate(5)->withQueryString();
+        $books = $query->latest()->paginate(6)->withQueryString();
 
         return view('books.index', compact('books'));
     }

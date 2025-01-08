@@ -86,15 +86,10 @@ class Book extends Model
             }
         });
 
-        // static::forceDeleting(function ($book) {
-        //     if ($book->cover) {
-        //         Storage::disk('public')->delete($book->cover);
-        //     }
-        //     // Loop through each cover and delete it
-        //     foreach ($book->covers as $cover) {
-        //         Storage::disk('public')->delete($cover->path);
-        //         $cover->delete();
-        //     }
-        // });
+        static::deleting(function ($book) {
+            if ($book->cover) {
+                Storage::disk('public')->delete($book->cover);
+            }
+        });
     }
 }

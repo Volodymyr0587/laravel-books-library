@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add the Book to Your Library') }}
+            {{ __('Edit the Book Information') }} - {{ $book->title }}
         </h2>
     </x-slot>
 
@@ -10,13 +10,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('books.update', $book) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <div class="space-y-12">
 
                             <div class="border-b border-gray-900/10 pb-12">
                                 <h2 class="text-base font-semibold leading-7 text-gray-900">Book Information</h2>
-                                <p class="mt-1 text-sm leading-6 text-gray-600">Add the book to your library.</p>
+                                <p class="mt-1 text-sm leading-6 text-gray-600">Edit the book</p>
 
                                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
@@ -27,14 +28,17 @@
                                             <select id="authors" name="authors[]" multiple autocomplete="authors"
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 @foreach ($authors as $author)
-                                                    <option value="{{ $author->id }}" {{ in_array($author->id, old('authors', [])) ? 'selected' : '' }}>
-                                                        {{ $author->name }}
-                                                    </option>
+                                                <option value="{{ $author->id }}" {{ in_array($author->id,
+                                                    old('authors', $book->authors->pluck('id')->toArray())) ? 'selected'
+                                                    : '' }}>
+                                                    {{ $author->name }}
+                                                </option>
                                                 @endforeach
                                             </select>
+
                                         </div>
                                         @error('authors')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -43,64 +47,72 @@
                                             class="block text-sm font-medium leading-6 text-gray-900">Title
                                         </label>
                                         <div class="mt-2">
-                                            <input type="text" name="title" id="title" value="{{ old('title') }}"
-                                                autocomplete="title" placeholder="The Lord of the Rings"
+                                            <input type="text" name="title" id="title"
+                                                value="{{ old('title', $book->title) }}" autocomplete="title"
+                                                placeholder="The Lord of the Rings"
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                         @error('title')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="col-span-full">
                                         <label for="year_of_publication"
-                                            class="block text-sm font-medium leading-6 text-gray-900">Year of Publishing</label>
+                                            class="block text-sm font-medium leading-6 text-gray-900">Year of
+                                            Publishing</label>
                                         <div class="mt-2">
-                                            <input type="text" name="year_of_publication" id="year_of_publication" value="{{ old('year_of_publication') }}"
+                                            <input type="text" name="year_of_publication" id="year_of_publication"
+                                                value="{{ old('year_of_publication', $book->year_of_publication) }}"
                                                 autocomplete="year_of_publication"
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                         @error('year_of_publication')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="col-span-full">
                                         <label for="num_of_pages"
-                                            class="block text-sm font-medium leading-6 text-gray-900">Number of pages (optional)</label>
+                                            class="block text-sm font-medium leading-6 text-gray-900">Number of pages
+                                            (optional)</label>
                                         <div class="mt-2">
-                                            <input type="number" name="num_of_pages" id="num_of_pages" value="{{ old('num_of_pages') }}"
+                                            <input type="number" name="num_of_pages" id="num_of_pages"
+                                                value="{{ old('num_of_pages', $book->num_of_pages) }}"
                                                 autocomplete="num_of_pages"
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                         @error('num_of_pages')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="col-span-full">
                                         <label for="genre"
-                                            class="block text-sm font-medium leading-6 text-gray-900">Genre (optional)</label>
+                                            class="block text-sm font-medium leading-6 text-gray-900">Genre
+                                            (optional)</label>
                                         <div class="mt-2">
-                                            <input type="text" name="genre" id="genre" value="{{ old('genre') }}"
+                                            <input type="text" name="genre" id="genre" value="{{ old('genre', $book->genre) }}"
                                                 autocomplete="genre"
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                         @error('genre')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
 
                                     <div class="col-span-full">
                                         <label for="description"
-                                            class="block text-sm font-medium leading-6 text-gray-900">Description (optional)</label>
+                                            class="block text-sm font-medium leading-6 text-gray-900">Description
+                                            (optional)</label>
                                         <div class="mt-2">
-                                            <textarea id="description" name="description" rows="3" placeholder="Write a description"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('description') }}</textarea>
+                                            <textarea id="description" name="description" rows="3"
+                                                placeholder="Write a description"
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('description', $book->description) }}</textarea>
                                         </div>
                                         @error('description')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -121,12 +133,16 @@
                                                 class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" />
                                         </div>
                                         @error('cover')
-                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
 
                                         <!-- Preview Image Container -->
                                         <div id="cover-image-preview" class="mt-2 flex items-center gap-x-3">
-                                            <img id="preview-image" src="" alt="Cover Image Preview" class="hidden w-32 h-32 object-cover rounded-md">
+                                            @if ($book->cover)
+                                                <img src="{{ asset('storage/' . $book->cover) }}" class="w-32 h-32 object-cover rounded-md" alt="">
+                                            @endif
+                                            <img id="preview-image" src="" alt="Cover Image Preview"
+                                                class="hidden w-32 h-32 object-cover rounded-md">
                                         </div>
                                     </div>
 
@@ -141,12 +157,23 @@
                                 Cancel
                             </a>
                             <button type="submit"
-                                class="flex select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                >
-                                Save book
+                                class="flex select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                                Update
                             </button>
                         </div>
                     </form>
+
+                    <div class="-mt-8">
+                        <form action="{{ route('books.destroy', $book) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Are you sure?');"
+                                class="flex select-none items-center gap-3 rounded-lg bg-red-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-900/10 transition-all hover:shadow-lg hover:shadow-red-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                >
+                                Delete
+                            </button>
+                        </form>
+                    </div>
 
                 </div>
             </div>
@@ -155,8 +182,6 @@
 
 
     <script>
-
-
         document.getElementById('cover').addEventListener('change', function(event) {
             const file = event.target.files[0]; // Access the file correctly
             const previewImage = document.getElementById('preview-image');
