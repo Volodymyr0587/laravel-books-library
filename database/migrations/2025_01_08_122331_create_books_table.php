@@ -18,10 +18,12 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Author::class)->constrained()->cascadeOnDelete();
             $table->string('title');
+            $table->string('slug')->unique();
             $table->year('year_of_publication');
             $table->integer('num_of_pages')->nullable();
             $table->string('genre')->nullable();
             $table->string('cover')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
