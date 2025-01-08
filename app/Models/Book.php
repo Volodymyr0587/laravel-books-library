@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -34,17 +35,20 @@ class Book extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function author(): BelongsTo
+    public function authors(): BelongsToMany
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsToMany(Author::class);
     }
 
-    public function scopeSearchByTitleDescription($query, $searchTerm)
+    public function scopeSearchByAuthorTitleDescription($query, $searchTerm)
     {
         if ($searchTerm) {
             return $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
-                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                ->orWhereHas('authors', function ($authorQuery) use ($searchTerm) {
+                    $authorQuery->where('name', 'like', '%' . $searchTerm . '%');
+                });
             });
         }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Author;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
@@ -13,9 +14,16 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = auth()->user()->books()->with('author')->latest()->paginate(10);
+        $searchTerm = $request->query('search');
+
+        $query = auth()->user()->books()
+            ->with('authors')
+            ->searchByAuthorTitleDescription($searchTerm);
+
+        $books = $query->latest()->paginate(5)->withQueryString();
+
         return view('books.index', compact('books'));
     }
 
@@ -24,7 +32,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $authors = Author::all(); // To populate author dropdown
+        $authors = auth()->user()->authors()->get(); // To populate author dropdown
         return view('books.create', compact('authors'));
     }
 
@@ -38,6 +46,10 @@ class BookController extends Controller
         $bookData['cover'] = $this->handleCoverImageUpload($request);
 
         $book = auth()->user()->books()->create($bookData);
+
+        if ($request->has('authors')) {
+            $book->authors()->attach($request->authors);
+        }
 
         return to_route('books.index')->with('success', "Book $book->title successfully created");
     }
@@ -58,7 +70,7 @@ class BookController extends Controller
     public function edit(Book $book)
     {
         Gate::authorize('editBook', $book); // Ensure only the owner can edit
-        $authors = Author::all();
+        $authors = auth()->user()->authors()->get(); // To populate author dropdown
         return view('books.edit', compact('book', 'authors'));
     }
 
@@ -77,6 +89,10 @@ class BookController extends Controller
         }
 
         $book->update($bookData);
+
+        if ($request->has('authors')) {
+            $book->authors()->sync($request->authors);
+        }
 
         return to_route('books.index')->with('success', "Book $book->title successfully updated");
     }

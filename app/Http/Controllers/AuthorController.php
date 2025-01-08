@@ -11,9 +11,15 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $authors = auth()->user()->authors()->with('books')->latest()->paginate(10);
+        $searchTerm = $request->query('search');
+
+        $query = auth()->user()->authors()
+            ->searchByName($searchTerm);
+
+        $authors = $query->latest()->paginate(5)->withQueryString();
+
         return view('authors.index', compact('authors'));
     }
 
@@ -36,7 +42,11 @@ class AuthorController extends Controller
             'author_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // dd($authorData);
+
         $authorData['author_photo'] = $this->handleAuthorImageUpload($request);
+
+        // dd($authorData);
 
         $author = auth()->user()->authors()->create($authorData);
 

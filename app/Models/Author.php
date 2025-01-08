@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Author extends Model
 {
@@ -13,16 +12,22 @@ class Author extends Model
     /**
      * Get all of the books for the Author
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function books(): HasMany
+    public function books(): BelongsToMany
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsToMany(Book::class);
     }
 
-    public function author(): BelongsTo
+    public function scopeSearchByName($query, $searchTerm)
     {
-        return $this->belongsTo(User::class);
+        if ($searchTerm) {
+            return $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        return $query;
     }
 
     protected static function boot()

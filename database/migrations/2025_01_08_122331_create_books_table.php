@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Author::class)->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
             $table->year('year_of_publication');
