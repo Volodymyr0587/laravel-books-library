@@ -53,17 +53,13 @@ class Book extends Model
 
     public function scopeSearchByAuthorTitleDescription($query, $searchTerm)
     {
-        if ($searchTerm) {
-            return $query->where(function ($q) use ($searchTerm) {
-                $q->where('title', 'like', '%' . $searchTerm . '%')
-                ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                ->orWhereHas('authors', function ($authorQuery) use ($searchTerm) {
-                    $authorQuery->where('name', 'like', '%' . $searchTerm . '%');
-                });
+        return $searchTerm ? $query->where(function ($q) use ($searchTerm) {
+            $q->where('title', 'like', '%' . $searchTerm . '%')
+            ->orWhere('description', 'like', '%' . $searchTerm . '%')
+            ->orWhereHas('authors', function ($authorQuery) use ($searchTerm) {
+                $authorQuery->where('name', 'like', '%' . $searchTerm . '%');
             });
-        }
-
-        return $query;
+        }) : $query;
     }
 
     public function scopeFilterByGenre(Builder $query, $genreId): Builder
