@@ -45,7 +45,7 @@
                         <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <!-- Book Cover -->
                             <img class="object-cover w-full h-64 rounded-t-lg md:h-48"
-                                 src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.png') }}"
+                                 src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.jpg') }}"
                                  alt="Cover of {{ $book->title }}">
 
                             <!-- Book Details -->
