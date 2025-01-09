@@ -22,6 +22,8 @@ class UpdateBookRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'authors' => 'required|array',
+            'authors.*' => 'exists:authors,id',
             'title' => 'required|string|max:255',
             'year_of_publication' => 'required|integer|digits:4|min:1800|max:' . date('Y'),
             'num_of_pages' => 'nullable|integer|min:1',
