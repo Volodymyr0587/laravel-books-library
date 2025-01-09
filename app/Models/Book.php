@@ -12,12 +12,12 @@ class Book extends Model
 {
     protected $fillable = [
         'user_id',
-        'author_id',
         'title',
+        'slug',
         'year_of_publication',
         'num_of_pages',
-        'genre',
         'cover',
+        'description',
     ];
 
     /**
@@ -38,6 +38,16 @@ class Book extends Model
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class);
+    }
+
+    /**
+     * The genres that belong to the Book
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class, 'book_genre');
     }
 
     public function scopeSearchByAuthorTitleDescription($query, $searchTerm)

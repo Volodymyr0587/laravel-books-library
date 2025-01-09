@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Author extends Model
 {
-    protected $fillable = ['name', 'bio', 'author_photo'];
+    protected $fillable = ['user_id', 'name', 'bio', 'author_photo'];
     /**
      * Get all of the books for the Author
      *

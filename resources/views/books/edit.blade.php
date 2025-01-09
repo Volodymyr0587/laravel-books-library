@@ -88,16 +88,21 @@
                                     </div>
 
                                     <div class="col-span-full">
-                                        <label for="genre"
-                                            class="block text-sm font-medium leading-6 text-gray-900">Genre
-                                            (optional)</label>
+                                        <label for="genres"
+                                            class="block w-full text-sm font-medium leading-6 text-gray-900">Genres</label>
                                         <div class="mt-2">
-                                            <input type="text" name="genre" id="genre" value="{{ old('genre', $book->genre) }}"
-                                                autocomplete="genre"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            <select id="genres" name="genres[]" multiple autocomplete="genres"
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                                @foreach ($genres as $genre)
+                                                    <option value="{{ $genre->id }}"
+                                                        {{ in_array($genre->id, old('genres', $book->genres->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
+                                                        {{ $genre->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        @error('genre')
-                                        <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
+                                        @error('genres')
+                                            <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
 

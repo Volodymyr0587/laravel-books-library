@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->year('year_of_publication');
             $table->integer('num_of_pages')->nullable();
-            $table->string('genre')->nullable();
             $table->string('cover')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();

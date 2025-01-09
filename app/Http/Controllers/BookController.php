@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Genre;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -33,7 +34,8 @@ class BookController extends Controller
     public function create()
     {
         $authors = auth()->user()->authors()->get(); // To populate author dropdown
-        return view('books.create', compact('authors'));
+        $genres = Genre::all();
+        return view('books.create', compact('authors', 'genres'));
     }
 
     /**
@@ -49,6 +51,10 @@ class BookController extends Controller
 
         if ($request->has('authors')) {
             $book->authors()->attach($request->authors);
+        }
+
+        if ($request->has('genres')) {
+            $book->genres()->attach($request->genres);
         }
 
         return to_route('books.index')->with('success', "Book $book->title successfully created");
@@ -71,7 +77,8 @@ class BookController extends Controller
     {
         Gate::authorize('editBook', $book); // Ensure only the owner can edit
         $authors = auth()->user()->authors()->get(); // To populate author dropdown
-        return view('books.edit', compact('book', 'authors'));
+        $genres = Genre::all();
+        return view('books.edit', compact('book', 'authors', 'genres'));
     }
 
     /**
@@ -92,6 +99,10 @@ class BookController extends Controller
 
         if ($request->has('authors')) {
             $book->authors()->sync($request->authors);
+        }
+
+        if ($request->has('genres')) {
+            $book->genres()->sync($request->input('genres'));
         }
 
         return to_route('books.index')->with('success', "Book $book->title successfully updated");

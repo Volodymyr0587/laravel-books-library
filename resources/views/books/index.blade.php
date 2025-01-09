@@ -47,6 +47,7 @@
                         <div class="flex flex-col justify-between p-4 leading-normal">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ $book->title }}</h5>
                             <p class="mb-3 font-normal text-gray-700">{{ implode(', ', $book->authors->pluck('name')->toArray()) }}</p>
+                            <p class="mb-3 font-normal text-gray-700">{{ implode(', ', $book->genres->pluck('name')->toArray()) }}</p>
                         </div>
                     </a>
                 @empty

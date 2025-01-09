@@ -24,7 +24,10 @@ class StoreBookRequest extends FormRequest
         return [
             'authors' => 'required|array',
             'authors.*' => 'exists:authors,id',
+            'genres' => 'nullable|array',
+            'genres.*' => 'exists:genres,id',
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:5000',
             'year_of_publication' => 'required|integer|digits:4|min:1800|max:' . date('Y'),
             'num_of_pages' => 'nullable|integer|min:1',
             'genre' => 'nullable|string|max:255',
