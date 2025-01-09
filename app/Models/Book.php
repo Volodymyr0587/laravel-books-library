@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -63,6 +64,13 @@ class Book extends Model
         }
 
         return $query;
+    }
+
+    public function scopeFilterByGenre(Builder $query, $genreId): Builder
+    {
+        return $genreId ? $query->whereHas('genres', function ($q) use ($genreId) {
+            $q->where('genres.id', $genreId);
+        }) : $query;
     }
 
     public function getRouteKeyName()

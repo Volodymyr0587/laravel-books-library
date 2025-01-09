@@ -40,19 +40,42 @@
                     </form>
                 </div>
 
-                <div class="grid grid-cols-4 lg:grid-cols-2 mt-6 gap-y-2">
-                @forelse ($books as $book)
-                    <a href="{{ route('books.show', $book) }}" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
-                        <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.png') }}" alt="Cover of {{ $book->title }}">
-                        <div class="flex flex-col justify-between p-4 leading-normal">
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ $book->title }}</h5>
-                            <p class="mb-3 font-normal text-gray-700">{{ implode(', ', $book->authors->pluck('name')->toArray()) }}</p>
-                            <p class="mb-3 font-normal text-gray-700">{{ implode(', ', $book->genres->pluck('name')->toArray()) }}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                    @forelse ($books as $book)
+                        <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <!-- Book Cover -->
+                            <img class="object-cover w-full h-64 rounded-t-lg md:h-48"
+                                 src="{{ $book->cover ? asset('storage/' . $book->cover) : asset('images/default-book-cover.png') }}"
+                                 alt="Cover of {{ $book->title }}">
+
+                            <!-- Book Details -->
+                            <div class="flex flex-col justify-between p-4">
+                                <h5 class="text-lg font-semibold text-gray-900 leading-tight truncate">
+                                    <a href="{{ route('books.show', $book) }}"
+                                       class="text-blue-600 hover:underline">
+                                        {{ $book->title }}
+                                    </a>
+                                </h5>
+                                <p class="mt-2 text-sm text-gray-700">
+                                    {{ implode(', ', $book->authors->pluck('name')->toArray()) }}
+                                </p>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    @forelse ($book->genres as $genre)
+                                        <a href="{{ route('books.index', ['genre_id' => $genre->id]) }}"
+                                           class="{{ Str::startsWith(Str::lower($genre->name), ['a', 'e', 'i', 'o', 'u', 'y']) ? 'bg-indigo-100 text-indigo-800' : 'bg-yellow-100 text-yellow-800' }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                                            {{ $genre->name }}
+                                        </a>
+                                    @empty
+                                        <span class="text-gray-500 italic">No genres</span>
+                                    @endforelse
+                                </div>
+                            </div>
                         </div>
-                    </a>
-                @empty
-                    No books yet
-                @endforelse
+                    @empty
+                        <div class="col-span-full text-center text-gray-500">
+                            No books available yet.
+                        </div>
+                    @endforelse
                 </div>
 
                 <div class="my-4 px-2">

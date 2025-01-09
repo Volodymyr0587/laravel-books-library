@@ -20,10 +20,11 @@ class BookController extends Controller
         $searchTerm = $request->query('search');
 
         $query = auth()->user()->books()
-            ->with('authors')
+            ->with(['authors', 'genres:id,name'])
+            ->filterByGenre($request->query('genre_id'))
             ->searchByAuthorTitleDescription($searchTerm);
 
-        $books = $query->latest()->paginate(6)->withQueryString();
+        $books = $query->latest()->paginate(8)->withQueryString();
 
         return view('books.index', compact('books'));
     }
