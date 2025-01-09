@@ -21,6 +21,7 @@ class BookController extends Controller
 
         $query = auth()->user()->books()
             ->with(['authors', 'genres:id,name'])
+            ->filterByAuthor($request->query('author_id'))
             ->filterByGenre($request->query('genre_id'))
             ->searchByAuthorTitleDescription($searchTerm);
 

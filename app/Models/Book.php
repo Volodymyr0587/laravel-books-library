@@ -73,6 +73,13 @@ class Book extends Model
         }) : $query;
     }
 
+    public function scopeFilterByAuthor(Builder $query, $authorId): Builder
+    {
+        return $authorId ? $query->whereHas('authors', function ($q) use ($authorId) {
+            $q->where('authors.id', $authorId);
+        }) : $query;
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

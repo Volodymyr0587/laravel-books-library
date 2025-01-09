@@ -52,13 +52,22 @@
                             <div class="flex flex-col justify-between p-4">
                                 <h5 class="text-lg font-semibold text-gray-900 leading-tight truncate">
                                     <a href="{{ route('books.show', $book) }}"
-                                       class="text-blue-600 hover:underline">
+                                       class="text-blue-600 hover:text-blue-800 hover:underline">
                                         {{ $book->title }}
                                     </a>
                                 </h5>
-                                <p class="mt-2 text-sm text-gray-700">
-                                    {{ implode(', ', $book->authors->pluck('name')->toArray()) }}
-                                </p>
+                                <p class="mt-2 text-xs text-gray-900 font-bold">Author(s):</p>
+                                <div class="mt-2  text-gray-700 flex flex-wrap gap-2">
+                                    @forelse ($book->authors as $author)
+                                        <a href="{{ route('books.index', ['author_id' => $author->id]) }}"
+                                           class="text-yellow-600 hover:text-yellow-800 hover:underline text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+                                            {{ $author->name }}
+                                        </a>
+                                    @empty
+                                        <span class="text-gray-500 italic">No authors</span>
+                                    @endforelse
+                                </div>
+                                <p class="mt-2 text-xs text-gray-900 font-bold">Genre(s):</p>
                                 <div class="mt-2 flex flex-wrap gap-2">
                                     @forelse ($book->genres as $genre)
                                         <a href="{{ route('books.index', ['genre_id' => $genre->id]) }}"
