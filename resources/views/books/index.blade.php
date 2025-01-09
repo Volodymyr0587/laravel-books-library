@@ -62,7 +62,7 @@
                                 <div class="mt-2 flex flex-wrap gap-2">
                                     @forelse ($book->genres as $genre)
                                         <a href="{{ route('books.index', ['genre_id' => $genre->id]) }}"
-                                           class="{{ Str::startsWith(Str::lower($genre->name), ['a', 'e', 'i', 'o', 'u', 'y']) ? 'bg-indigo-100 text-indigo-800' : 'bg-yellow-100 text-yellow-800' }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                                           class="{{ App\Helpers\GenreHelper::badgeColor($genre) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
                                             {{ $genre->name }}
                                         </a>
                                     @empty
