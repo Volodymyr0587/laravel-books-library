@@ -40,7 +40,7 @@
                     </form>
                 </div>
 
-                <div class="grid grid-cols-4 lg:grid-cols-2 mt-6 gap-y-2">
+                <div class="grid grid-cols-1  md:grid-cols-2 mt-6 gap-y-2 gap-x-2">
                     @forelse ($authors as $author)
                         <a href="{{ route('authors.show', $author) }}" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
                             <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{ $author->author_photo ? asset('storage/' . $author->author_photo) : asset('images/default-author-photo.jpg') }}" alt="{{ $author->name }}">
