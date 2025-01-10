@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -102,6 +103,19 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         Gate::authorize('editAuthor', $author);
+
+        if ($author->books()->exists()) {
+            // Optionally handle reassignment or deletion of the related books
+            $count = $author->books()->count();
+
+            // Generate the link to view all books by this author
+            $booksLink = route('books.index', ['author_id' => $author->id]);
+            // Create the warning message with the link
+            $message = "This author has $count associated " . Str::plural('book', $count) .
+                " and cannot be deleted. <a href=\"$booksLink\" class=\"text-blue-500 underline\">View all books by this author</a>.";
+
+            return redirect()->back()->with('warning', $message);
+        }
 
         $author->delete();
 
