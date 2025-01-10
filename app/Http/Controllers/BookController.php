@@ -49,6 +49,9 @@ class BookController extends Controller
 
         $bookData['cover'] = $this->handleCoverImageUpload($request);
 
+        // Remove 'authors' and 'genres' from $bookData to avoid mass assignment issues
+        unset($bookData['authors'], $bookData['genres']);
+
         $book = auth()->user()->books()->create($bookData);
 
         if ($request->has('authors')) {
