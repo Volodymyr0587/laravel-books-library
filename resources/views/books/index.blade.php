@@ -71,7 +71,7 @@
                                 <div class="mt-2 flex flex-wrap gap-2">
                                     @forelse ($book->genres as $genre)
                                         <a href="{{ route('books.index', ['genre_id' => $genre->id]) }}"
-                                           class="{{ App\Helpers\GenreHelper::badgeColor($genre) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                                           class="{{ App\Helpers\GenreHelper::badgeColor($genre->name) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
                                             {{ $genre->name }}
                                         </a>
                                     @empty
