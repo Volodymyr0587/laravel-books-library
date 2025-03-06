@@ -90,16 +90,14 @@
                                     <div class="col-span-full">
                                         <label for="genres"
                                             class="block w-full text-sm font-medium leading-6 text-gray-900">Genres</label>
-                                        <div class="mt-2">
-                                            <select id="genres" name="genres[]" multiple autocomplete="genres"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                                @foreach ($genres as $genre)
-                                                    <option value="{{ $genre->id }}"
-                                                        {{ in_array($genre->id, old('genres', $book->genres->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
-                                                        {{ $genre->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                        <div class="grid grid-cols-4 gap-2">
+                                            @foreach ($genres as $genre)
+                                                <label class="flex items-center space-x-2">
+                                                    <input type="checkbox" name="genres[]" value="{{ $genre->id }}" class="rounded-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                                                           {{ in_array($genre->id, old('genres', $book->genres->pluck('id')->toArray() ?? [])) ? 'checked' : '' }}>
+                                                    <span>{{ $genre->name }}</span>
+                                                </label>
+                                            @endforeach
                                         </div>
                                         @error('genres')
                                             <span class="text-sm font-bold text-red-500 mt-2">{{ $message }}</span>
