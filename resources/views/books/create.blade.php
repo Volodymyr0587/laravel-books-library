@@ -81,12 +81,12 @@
                                     <div class="col-span-full">
                                         <label for="genres"
                                             class="block w-full text-sm font-medium leading-6 text-gray-900">Genres</label>
-                                        <div class="grid grid-cols-4 gap-2">
+                                        <div class="grid grid-cols-4 gap-2 mt-2">
                                             @foreach ($genres as $genre)
                                                 <label class="flex items-center space-x-2">
                                                     <input type="checkbox" name="genres[]" value="{{ $genre->id }}" class="rounded-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                                                            {{ in_array($genre->id, old('genres', [])) ? 'checked' : '' }}>
-                                                    <span>{{ $genre->name }}</span>
+                                                    <span class="text-sm">{{ $genre->name }}</span>
                                                 </label>
                                             @endforeach
                                         </div>
