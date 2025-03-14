@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Book;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
@@ -20,6 +21,15 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('books', BookController::class);
     Route::resource('authors', AuthorController::class);
+
+    Route::get('/covers', function () {
+        $books = auth()->user()->books()
+            ->select('id', 'cover', 'title')
+            ->whereNotNull('cover')
+            ->without('authors', 'genres')
+            ->paginate(12);
+        return view('books.covers', compact('books'));
+    })->name('books.covers');
 });
 
 require __DIR__.'/auth.php';
