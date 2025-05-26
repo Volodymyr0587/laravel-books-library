@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Genre;
-use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreBookRequest;
@@ -62,7 +61,7 @@ class BookController extends Controller
             $book->genres()->attach($request->genres);
         }
 
-        return to_route('books.index')->with('success', "Book $book->title successfully created");
+        return to_route('books.index')->with('message', "Book $book->title successfully created");
     }
 
     /**
@@ -113,7 +112,7 @@ class BookController extends Controller
             $book->genres()->sync($request->input('genres'));
         }
 
-        return to_route('books.index')->with('success', "Book $book->title successfully updated");
+        return to_route('books.show', $book)->with('message', "Book $book->title successfully updated");
     }
 
     /**
@@ -125,7 +124,7 @@ class BookController extends Controller
 
         $book->delete();
 
-        return to_route('books.index')->with('success', "Book $book->title successfully deleted");
+        return to_route('books.index')->with('message', "Book $book->title successfully deleted");
     }
 
     protected function handleCoverImageUpload($request)
