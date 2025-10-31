@@ -15,7 +15,7 @@
                         <a href="{{ route('books.create') }}"
                         class="select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         >
-                        Add Book to Library
+                        Add Book to Library...
                         </a>
                     </div>
                     <form action="{{ route('books.index') }}" class="mt-6">
