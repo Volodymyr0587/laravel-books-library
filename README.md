@@ -89,6 +89,4 @@ Register a new user or log in with existing credentials. Only authenticated user
 - Use the .env file to configure application settings, such as the database connection and storage paths.
 - Follow best practices for securing sensitive environment variables.
 
-## License
 
-This project is licensed under the MIT License.
